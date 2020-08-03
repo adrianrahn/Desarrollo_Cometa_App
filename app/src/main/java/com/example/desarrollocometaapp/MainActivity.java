@@ -14,10 +14,14 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     Button plusButton, minusButton, scanButton, saveButton;
-    TextView quantityText;
+    TextView quantityText, priceText,productText;
+    int quantity = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +29,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         quantityText = (TextView) findViewById(R.id.quantityTextView);
+        quantityText.setText("" + quantity);
+        priceText = (TextView) findViewById(R.id.priceTextView);
+        productText = (TextView) findViewById(R.id.productTextView);
         plusButton = (Button) findViewById(R.id.plusButton);
         plusButton.setOnClickListener(this);
         minusButton = (Button) findViewById(R.id.minusButton);
@@ -33,16 +40,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         scanButton.setOnClickListener(this);
         saveButton = (Button) findViewById(R.id.saveButton);
         saveButton.setOnClickListener(this);
+
     }
 
     public void onClick(View view) {
         switch (view.getId()){
 
             case R.id.plusButton:
-                Toast.makeText(this, "plusButton pressed", Toast.LENGTH_SHORT).show();
+                    quantity += 1;
+                    quantityText.setText("" + quantity);
+                    Toast.makeText(this, "+ pressed", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.minusButton:
-                Toast.makeText(this, "minusButton pressed", Toast.LENGTH_SHORT).show();
+                if(quantity >= 1){
+                    quantity -= 1;
+                    quantityText.setText("" + quantity);
+                    Toast.makeText(this, "- pressed", Toast.LENGTH_SHORT).show();
+
+                }
                 break;
             case R.id.scanButton:
                 Toast.makeText(this, "scanButton pressed", Toast.LENGTH_SHORT).show();
@@ -71,8 +86,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (result != null){
             if (result.getContents() != null){
 
-                String resultado = result.getContents().toString();
-                quantityText.setText(resultado);
+                String resultado = result.getContents();
+                try {
+                    JSONObject jsonjObject = new JSONObject(resultado);
+
+                    //{ "producto":"Manzana" , "precio":"1" }
+                    String productString = jsonjObject.getString("producto");
+                    String priceString = jsonjObject.getString("precio");
+
+                    productText.setText(productString);
+                    priceText.setText(priceString + " euro");
+                    quantity = 1;
+                    quantityText.setText("" + quantity);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+
                /* AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setMessage(result.getContents());
                 builder.setTitle("Scanning Result");

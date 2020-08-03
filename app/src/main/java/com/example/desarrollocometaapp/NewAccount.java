@@ -2,6 +2,7 @@ package com.example.desarrollocometaapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -27,7 +28,18 @@ public class NewAccount extends AppCompatActivity implements View.OnClickListene
 
     public void onClick(View view) {
         if (view.getId() == R.id.createAccountBtn){
-            Toast.makeText(this, "CreateAccount pressed", Toast.LENGTH_SHORT).show();
+            String emailText = email.getEditText().getText().toString().trim();
+            String passwordText = password.getEditText().getText().toString().trim();
+
+            if(!emailText.isEmpty() && !passwordText.isEmpty()){
+                Toast.makeText(this, emailText + passwordText, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);}
+            else{
+                Toast.makeText(this, "El campo de usuario o contraseña está vacío", Toast.LENGTH_SHORT).show();
+                }
         }
     }
 }
