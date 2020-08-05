@@ -11,6 +11,13 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -19,9 +26,10 @@ import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    Button plusButton, minusButton, scanButton, saveButton;
-    TextView quantityText, priceText,productText;
-    int quantity = 0;
+    private Button plusButton, minusButton, scanButton, saveButton;
+    private TextView quantityText, priceText,productText;
+    private int quantity = 0;
+    private RequestQueue myQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         scanButton.setOnClickListener(this);
         saveButton = (Button) findViewById(R.id.saveButton);
         saveButton.setOnClickListener(this);
+        myQueue = Volley.newRequestQueue(getApplicationContext());
 
     }
 
@@ -49,26 +58,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.plusButton:
                     quantity += 1;
                     quantityText.setText("" + quantity);
-                    Toast.makeText(this, "+ pressed", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.minusButton:
                 if(quantity >= 1){
                     quantity -= 1;
                     quantityText.setText("" + quantity);
-                    Toast.makeText(this, "- pressed", Toast.LENGTH_SHORT).show();
-
+                    startActivity(new Intent(this, Login.class));
                 }
                 break;
             case R.id.scanButton:
-                Toast.makeText(this, "scanButton pressed", Toast.LENGTH_SHORT).show();
                 ScanCode();
                 break;
             case R.id.saveButton:
-                Toast.makeText(this, "saveButton pressed", Toast.LENGTH_SHORT).show();
+               // startActivity(new Intent(this, Login.class));
+                 JsonResponse();
                 break;
             default:
                 break;
         }
+    }
+//todo: Get
+    private void JsonResponse() {
+        String url = "https://cometa.app/cafeteria/home/pruebaget";
+
+        StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                    Toast.makeText(MainActivity.this, response, Toast.LENGTH_SHORT).show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }){};
+        myQueue.add(request);
     }
 
     private void ScanCode() {
@@ -78,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         integrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
         integrator.setPrompt("scanning code");
         integrator.initiateScan();
-    }
+}
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -93,7 +118,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     //{ "producto":"Manzana" , "precio":"1" }
                     String productString = jsonjObject.getString("producto");
                     String priceString = jsonjObject.getString("precio");
-
                     productText.setText(productString);
                     priceText.setText(priceString + " euro");
                     quantity = 1;
@@ -102,29 +126,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-
-
-               /* AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage(result.getContents());
-                builder.setTitle("Scanning Result");
-                builder.setPositiveButton("Scan Again", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        ScanCode();
-                    }
-                }).setNegativeButton("Finish", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                    }
-                });
-                AlertDialog dialog = builder.create();
-                dialog.show();*/
             }
             else {
                 Toast.makeText(this, "No Results", Toast.LENGTH_SHORT).show();
             }
         } else {super.onActivityResult( requestCode, resultCode, data);}
     }
+
+
 }
