@@ -27,7 +27,7 @@ import org.json.JSONObject;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button plusButton, minusButton, scanButton, saveButton;
-    private TextView quantityText, priceText,productText;
+    private TextView quantityText,productText;
     private int quantity = 0;
     private RequestQueue myQueue;
 
@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         quantityText = (TextView) findViewById(R.id.quantityTextView);
         quantityText.setText("" + quantity);
-        priceText = (TextView) findViewById(R.id.priceTextView);
         productText = (TextView) findViewById(R.id.productTextView);
         plusButton = (Button) findViewById(R.id.plusButton);
         plusButton.setOnClickListener(this);
@@ -63,36 +62,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if(quantity >= 1){
                     quantity -= 1;
                     quantityText.setText("" + quantity);
-                    startActivity(new Intent(this, Login.class));
                 }
                 break;
             case R.id.scanButton:
                 ScanCode();
                 break;
             case R.id.saveButton:
-               // startActivity(new Intent(this, Login.class));
-                 JsonResponse();
+                JsonGetResponse();
                 break;
             default:
                 break;
         }
     }
 //todo: Get
-    private void JsonResponse() {
+    private void JsonGetResponse() {
         String url = "https://cometa.app/cafeteria/home/pruebaget";
 
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-
                     Toast.makeText(MainActivity.this, response, Toast.LENGTH_SHORT).show();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                Toast.makeText(MainActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
             }
-        }){};
+        });
         myQueue.add(request);
     }
 
@@ -115,11 +111,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 try {
                     JSONObject jsonjObject = new JSONObject(resultado);
 
-                    //{ "producto":"Manzana" , "precio":"1" }
-                    String productString = jsonjObject.getString("producto");
-                    String priceString = jsonjObject.getString("precio");
+                    //{ "token":"Manzana" , "id":"1" }
+                    String productString = jsonjObject.getString("token");
+                    String priceString = jsonjObject.getString("id");
                     productText.setText(productString);
-                    priceText.setText(priceString + " euro");
                     quantity = 1;
                     quantityText.setText("" + quantity);
 
