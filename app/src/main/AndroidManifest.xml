@@ -16,19 +16,26 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SplashScreen">
+        <activity android:name=".Views.ManualActivity">
+
+        </activity>
+        <activity android:name=".Views.ScannedActivity" />
+        <activity android:name=".Views.SplashScreen">
+        </activity>
+        <activity android:name=".Auth.NewAccount" />
+        <activity android:name=".Auth.Login" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".NewAccount" />
-        <activity android:name=".Login">
+        <activity android:name=".Views.MainActivity">
+
         </activity>
-        <activity android:name=".MainActivity" />
+
         <activity
-            android:name=".CaptureAct"
+            android:name=".Classes.CaptureAct"
             android:screenOrientation="fullSensor"
             android:stateNotNeeded="true"
             android:windowSoftInputMode="stateAlwaysHidden" />

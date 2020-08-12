@@ -1,4 +1,4 @@
-package com.example.desarrollocometaapp;
+package com.example.desarrollocometaapp.Views;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,7 +6,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
-public class SplashScreen extends AppCompatActivity {
+import com.example.desarrollocometaapp.Auth.Login;
+import com.example.desarrollocometaapp.R;
+
+public class
+SplashScreen extends AppCompatActivity {
     /** Duration of wait **/
     private final int SPLASH_DISPLAY_LENGTH = 1000;
 

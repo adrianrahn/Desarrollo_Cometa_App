@@ -1,4 +1,4 @@
-package com.example.desarrollocometaapp;
+package com.example.desarrollocometaapp.Classes;
 
 import com.journeyapps.barcodescanner.CaptureActivity;
 

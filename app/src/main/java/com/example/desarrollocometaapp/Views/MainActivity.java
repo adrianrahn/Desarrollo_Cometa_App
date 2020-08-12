@@ -1,9 +1,6 @@
-package com.example.desarrollocometaapp;
+package com.example.desarrollocometaapp.Views;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -15,9 +12,10 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.desarrollocometaapp.Classes.CaptureAct;
+import com.example.desarrollocometaapp.R;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -26,7 +24,7 @@ import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private Button plusButton, minusButton, scanButton, saveButton;
+    private Button scanButton, saveButton;
     private TextView quantityText,productText;
     private int quantity = 0;
     private RequestQueue myQueue;
@@ -36,13 +34,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        quantityText = (TextView) findViewById(R.id.quantityTextView);
-        quantityText.setText("" + quantity);
-        productText = (TextView) findViewById(R.id.productTextView);
-        plusButton = (Button) findViewById(R.id.plusButton);
-        plusButton.setOnClickListener(this);
-        minusButton = (Button) findViewById(R.id.minusButton);
-        minusButton.setOnClickListener(this);
         scanButton = (Button) findViewById(R.id.scanButton);
         scanButton.setOnClickListener(this);
         saveButton = (Button) findViewById(R.id.saveButton);
@@ -53,22 +44,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void onClick(View view) {
         switch (view.getId()){
-
-            case R.id.plusButton:
-                    quantity += 1;
-                    quantityText.setText("" + quantity);
-                break;
-            case R.id.minusButton:
-                if(quantity >= 1){
-                    quantity -= 1;
-                    quantityText.setText("" + quantity);
-                }
-                break;
             case R.id.scanButton:
-                ScanCode();
+                //ScanCode();
+                startActivity(new Intent(this, ScannedActivity.class));
                 break;
             case R.id.saveButton:
-                JsonGetResponse();
+                startActivity(new Intent(this, ManualActivity.class));
+
+                //JsonGetResponse();
                 break;
             default:
                 break;

@@ -1,4 +1,4 @@
-package com.example.desarrollocometaapp;
+package com.example.desarrollocometaapp.Auth;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,12 +8,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.desarrollocometaapp.Classes.RequestClass;
+import com.example.desarrollocometaapp.Views.MainActivity;
+import com.example.desarrollocometaapp.R;
 import com.google.android.material.textfield.TextInputLayout;
 
 public class NewAccount extends AppCompatActivity implements View.OnClickListener {
 
     TextInputLayout email, password;
     Button createAccountButton;
+    RequestClass requestClass;
+    String url = "https://cometa.app/cafeteria/login/check";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +29,7 @@ public class NewAccount extends AppCompatActivity implements View.OnClickListene
         password = (TextInputLayout) findViewById(R.id.passwordTextNewAccount);
         createAccountButton = (Button) findViewById(R.id.createAccountBtn);
         createAccountButton.setOnClickListener(this);
+        requestClass = new RequestClass();
     }
 
     public void onClick(View view) {
@@ -32,11 +38,12 @@ public class NewAccount extends AppCompatActivity implements View.OnClickListene
             String passwordText = password.getEditText().getText().toString().trim();
 
             if(!emailText.isEmpty() && !passwordText.isEmpty()){
-                Toast.makeText(this, emailText + passwordText, Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(this, MainActivity.class);
+
+                requestClass.postStringLoginRequest(getApplicationContext(), url, emailText, passwordText);
+               /* Intent intent = new Intent(this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);}
+                startActivity(intent);*/}
             else{
                 Toast.makeText(this, "El campo de usuario o contraseña está vacío", Toast.LENGTH_SHORT).show();
                 }

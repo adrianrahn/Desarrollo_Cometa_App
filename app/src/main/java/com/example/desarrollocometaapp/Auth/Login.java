@@ -1,4 +1,4 @@
-package com.example.desarrollocometaapp;
+package com.example.desarrollocometaapp.Auth;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -9,23 +9,19 @@ import android.widget.Button;
 import android.widget.Toast;
 
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
+import com.example.desarrollocometaapp.Views.MainActivity;
+import com.example.desarrollocometaapp.R;
+import com.example.desarrollocometaapp.Classes.RequestClass;
 import com.google.android.material.textfield.TextInputLayout;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class Login extends AppCompatActivity implements View.OnClickListener {
 
     Button loginButton, noAccountButton;
     TextInputLayout email, password;
     private RequestQueue myQueue;
+    RequestClass requestClass;
+    String url = "https://cometa.app/cafeteria/login/check";
 
 
     @Override
@@ -39,6 +35,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         loginButton.setOnClickListener(this);
         noAccountButton = (Button) findViewById(R.id.noAccountBtn);
         noAccountButton.setOnClickListener(this);
+        requestClass = new RequestClass();
     }
 
     public void onClick(View view) {
@@ -47,8 +44,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             String passwordText = password.getEditText().getText().toString().trim();
 
             if(!emailText.isEmpty() && !passwordText.isEmpty()){
-                JSONPostInfo();
-                /*Intent intent = new Intent(this, MainActivity.class);
+                requestClass.postStringLoginRequest(getApplicationContext(), url, emailText, passwordText);
+
+               /* Intent intent = new Intent(this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);*/}
@@ -64,32 +62,5 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     private void moveToMain() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
-    }
-
-    //todo: Post
-    private void JSONPostInfo() {
-        String url = "https://cometa.app/cafeteria/home/pruebapost";
-        myQueue = Volley.newRequestQueue(getApplicationContext());
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                    Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
-                    moveToMain();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), error.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams(){
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("email", email.getEditText().getText().toString().trim());
-                params.put("password", password.getEditText().getText().toString().trim());
-                return params;
-            }
-        };
-        myQueue.add(stringRequest);
     }
 }
