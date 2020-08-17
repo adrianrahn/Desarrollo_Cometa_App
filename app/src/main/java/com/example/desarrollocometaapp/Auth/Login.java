@@ -16,6 +16,7 @@ import com.example.desarrollocometaapp.Classes.RequestClass;
 import com.google.android.material.textfield.TextInputLayout;
 
 public class Login extends AppCompatActivity implements View.OnClickListener {
+    int i = 0;
 
     Button loginButton, noAccountButton;
     TextInputLayout email, password;
@@ -45,20 +46,14 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
             if(!emailText.isEmpty() && !passwordText.isEmpty()){
                 requestClass.postStringLoginRequest(getApplicationContext(), url, emailText, passwordText);
-
-               /* Intent intent = new Intent(this, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);*/}
-            else{
-                Toast.makeText(this, "Usuario o contraseña incorrecta", Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(this, "Correo y contraseña incorrecto", Toast.LENGTH_SHORT).show();
             }
         }else if (view.getId() == R.id.noAccountBtn){
-            startActivity(new Intent(this, NewAccount.class));
+           //startActivity(new Intent(this, NewAccount.class));
+            moveToMain();
         }
-
     }
-
     private void moveToMain() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);

@@ -22,7 +22,7 @@
         app:layout_constraintVertical_bias="0.65" />
 
     <Button
-        android:id="@+id/saveButton"
+        android:id="@+id/manualButton"
         android:layout_width="350dp"
         android:layout_height="80dp"
         android:background="@drawable/rounded_buttons"

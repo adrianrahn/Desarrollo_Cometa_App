@@ -4,20 +4,28 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.desarrollocometaapp.Classes.Producto;
 import com.example.desarrollocometaapp.R;
 import com.example.desarrollocometaapp.Classes.RequestClass;
 
-public class ManualActivity extends AppCompatActivity implements View.OnClickListener {
+import java.util.ArrayList;
+
+public class ManualActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     private Button plusButton, minusButton, saveButton;
     private TextView quantityText;
     private Spinner productsSpinner;
     private int quantity = 0;
     RequestClass requester;
+    ArrayList<String> arrayList= new ArrayList<String>();
+    ArrayList<Producto> productoArrayList = new ArrayList<Producto>();
 
 
     @Override
@@ -34,8 +42,13 @@ public class ManualActivity extends AppCompatActivity implements View.OnClickLis
         saveButton = (Button) findViewById(R.id.saveButtonManual);
         saveButton.setOnClickListener(this);
         productsSpinner = (Spinner) findViewById(R.id.productsSpinnerManual);
-        requester = new RequestClass();
 
+        requester = new RequestClass();
+        //requester.getArrayRequests(getApplicationContext(), arrayList, productoArrayList);
+        arrayList = getIntentArray();
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter(this,android.R.layout.simple_spinner_item, arrayList);
+        productsSpinner.setAdapter(adapter);
+        productsSpinner.setOnItemSelectedListener(this);
     }
 
     @Override
@@ -54,10 +67,32 @@ public class ManualActivity extends AppCompatActivity implements View.OnClickLis
                 break;
 
             case R.id.saveButtonManual:
-                requester.getStringRequest(getApplicationContext(), "https://cometa.app/cafeteria/stock/getproducts");
+                    requester.genericStringGetRequest(getApplicationContext(), "https://cometa.app/cafeteria/stock/getproducts");
                 break;
             default:
                 break;
         }
     }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        try {
+            String text = productsSpinner.getSelectedItem().toString();
+            Toast.makeText(this, "id:" + position , Toast.LENGTH_SHORT).show();
+
+        }catch (Error error){
+            Toast.makeText(this, error.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+    public ArrayList<String> getIntentArray(){
+        ArrayList<String> list = getIntent().getStringArrayListExtra("array");
+        return list;
+    }
+
 }

@@ -15,6 +15,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.desarrollocometaapp.Classes.CaptureAct;
+import com.example.desarrollocometaapp.Classes.Producto;
+import com.example.desarrollocometaapp.Classes.RequestClass;
 import com.example.desarrollocometaapp.R;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -22,12 +24,14 @@ import com.google.zxing.integration.android.IntentResult;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button scanButton, saveButton;
-    private TextView quantityText,productText;
-    private int quantity = 0;
-    private RequestQueue myQueue;
+    RequestClass requestClass;
+    ArrayList<String> arrayList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,44 +40,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         scanButton = (Button) findViewById(R.id.scanButton);
         scanButton.setOnClickListener(this);
-        saveButton = (Button) findViewById(R.id.saveButton);
+        saveButton = (Button) findViewById(R.id.manualButton);
         saveButton.setOnClickListener(this);
-        myQueue = Volley.newRequestQueue(getApplicationContext());
+        requestClass = new RequestClass();
+        arrayList = new ArrayList<String>();
 
+        requestClass.getArrayRequest(getApplicationContext(), arrayList);
     }
 
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.scanButton:
-                //ScanCode();
-                startActivity(new Intent(this, ScannedActivity.class));
-                break;
-            case R.id.saveButton:
-                startActivity(new Intent(this, ManualActivity.class));
 
-                //JsonGetResponse();
+                ScanCode();
+
                 break;
+
+            case R.id.manualButton:
+                Intent intent = new Intent(this, ManualActivity.class);
+                intent.putStringArrayListExtra("array", arrayList);
+                startActivity(intent);
+                break;
+
             default:
                 break;
         }
     }
-//todo: Get
-    private void JsonGetResponse() {
-        String url = "https://cometa.app/cafeteria/home/pruebaget";
 
-        StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                    Toast.makeText(MainActivity.this, response, Toast.LENGTH_SHORT).show();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(MainActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-        myQueue.add(request);
-    }
+
+
+    //Todo: Scanner
 
     private void ScanCode() {
         IntentIntegrator integrator = new IntentIntegrator(this);
@@ -97,9 +93,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     //{ "token":"Manzana" , "id":"1" }
                     String productString = jsonjObject.getString("token");
                     String priceString = jsonjObject.getString("id");
-                    productText.setText(productString);
-                    quantity = 1;
-                    quantityText.setText("" + quantity);
+                    Intent intent = new Intent(this, ScannedActivity.class);
+                    intent.putExtra("JsonObjectId", productString);
+                    intent.putExtra("JsonObjectPrice", priceString);
+                    startActivity(intent);
 
                 } catch (JSONException e) {
                     e.printStackTrace();

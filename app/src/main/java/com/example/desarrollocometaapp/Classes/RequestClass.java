@@ -1,6 +1,7 @@
 package com.example.desarrollocometaapp.Classes;
 
 import android.content.Context;
+import android.content.Intent;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -12,6 +13,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.desarrollocometaapp.Classes.Producto;
+import com.example.desarrollocometaapp.Views.MainActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,7 +25,7 @@ import java.util.Map;
 
 public class RequestClass {
 
-    public void getStringRequest(final Context context, String Url){
+    public void genericStringGetRequest(final Context context, String Url){
         RequestQueue myQueue = Volley.newRequestQueue(context);
         StringRequest request = new StringRequest(Request.Method.GET, Url, new Response.Listener<String>() {
 
@@ -46,20 +48,18 @@ public class RequestClass {
             public void onResponse(String response) {
                 switch (response){
                     case "true":
-                        Toast.makeText(context, "Bienvenido", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "Bienvenido", Toast.LENGTH_SHORT).show();
                         break;
-                    case "ERROR 10001":
-                        Toast.makeText(context, "Correo incorrecto", Toast.LENGTH_LONG).show();
+                    case "\"ERROR 10001\"true":
+                        Toast.makeText(context, "Correo incorrecto", Toast.LENGTH_SHORT).show();
                         break;
-                    case "ERROR 10002True":
-                        Toast.makeText(context, "Contraseña incorrecta", Toast.LENGTH_LONG).show();
+                    case "\"ERROR 10002\"true":
+                        Toast.makeText(context, "Contraseña incorrecta", Toast.LENGTH_SHORT).show();
                         break;
                     default:
-                        Toast.makeText(context, response, Toast.LENGTH_LONG).show();
-
+                        Toast.makeText(context, "Correo y contraseña incorrecto", Toast.LENGTH_SHORT).show();
                         break;
                 }
-
             }
         }, new Response.ErrorListener() {
             @Override
@@ -100,7 +100,34 @@ public class RequestClass {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(context , error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+        myQueue.add(request);
+    }
+    public void getArrayRequest(final Context context, final ArrayList<String> list){
+        final RequestQueue myQueue = Volley.newRequestQueue(context);
+        final JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, "https://cometa.app/cafeteria/stock/getproducts", null, new Response.Listener<JSONArray>() {
 
+            @Override
+            public void onResponse(JSONArray response) {
+                try {
+                    JSONArray jsonArray = response;
+
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject object = jsonArray.getJSONObject(i);
+                        String id = object.getString("id");
+                        String name = object.getString("name");
+                        String price = object.getString("price");
+                        list.add(name);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }, new Response.ErrorListener() {
             @Override
