@@ -25,7 +25,8 @@ public class ManualActivity extends AppCompatActivity implements View.OnClickLis
     private int quantity = 0;
     RequestClass requester;
     ArrayList<String> arrayList= new ArrayList<String>();
-    ArrayList<Producto> productoArrayList = new ArrayList<Producto>();
+    ArrayList<Producto> productoArrayList= new ArrayList<Producto>();
+    String productId;
 
 
     @Override
@@ -42,13 +43,12 @@ public class ManualActivity extends AppCompatActivity implements View.OnClickLis
         saveButton = (Button) findViewById(R.id.saveButtonManual);
         saveButton.setOnClickListener(this);
         productsSpinner = (Spinner) findViewById(R.id.productsSpinnerManual);
-
         requester = new RequestClass();
-        //requester.getArrayRequests(getApplicationContext(), arrayList, productoArrayList);
         arrayList = getIntentArray();
         ArrayAdapter<CharSequence> adapter = new ArrayAdapter(this,android.R.layout.simple_spinner_item, arrayList);
         productsSpinner.setAdapter(adapter);
         productsSpinner.setOnItemSelectedListener(this);
+
     }
 
     @Override
@@ -67,7 +67,7 @@ public class ManualActivity extends AppCompatActivity implements View.OnClickLis
                 break;
 
             case R.id.saveButtonManual:
-                    requester.genericStringGetRequest(getApplicationContext(), "https://cometa.app/cafeteria/stock/getproducts");
+                requester.postSaveProductRequest(getApplicationContext(), "https://cometa.app/cafeteria/stock/newsale", getUserId(), "1", quantityText.getText().toString());
                 break;
             default:
                 break;
@@ -78,7 +78,7 @@ public class ManualActivity extends AppCompatActivity implements View.OnClickLis
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         try {
             String text = productsSpinner.getSelectedItem().toString();
-            Toast.makeText(this, "id:" + position , Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "id:" + text , Toast.LENGTH_SHORT).show();
 
         }catch (Error error){
             Toast.makeText(this, error.getMessage(), Toast.LENGTH_SHORT).show();
@@ -95,4 +95,8 @@ public class ManualActivity extends AppCompatActivity implements View.OnClickLis
         return list;
     }
 
+    public String getUserId(){
+        String id = getIntent().getStringExtra("userId");
+        return id;
+    }
 }

@@ -3,17 +3,10 @@ package com.example.desarrollocometaapp.Views;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.desarrollocometaapp.Classes.CaptureAct;
 import com.example.desarrollocometaapp.Classes.Producto;
 import com.example.desarrollocometaapp.Classes.RequestClass;
@@ -31,6 +24,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button scanButton, saveButton;
     RequestClass requestClass;
     ArrayList<String> arrayList;
+    ArrayList<Producto> productoArrayList;
+
 
 
     @Override
@@ -44,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         saveButton.setOnClickListener(this);
         requestClass = new RequestClass();
         arrayList = new ArrayList<String>();
+        productoArrayList = new ArrayList<Producto>();
 
         requestClass.getArrayRequest(getApplicationContext(), arrayList);
     }
@@ -67,8 +63,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-
-
     //Todo: Scanner
 
     private void ScanCode() {
@@ -89,17 +83,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 String resultado = result.getContents();
                 try {
                     JSONObject jsonjObject = new JSONObject(resultado);
-
-                    //{ "token":"Manzana" , "id":"1" }
-                    String productString = jsonjObject.getString("token");
-                    String priceString = jsonjObject.getString("id");
+                    String productString = jsonjObject.getString("id");
+                    Toast.makeText(this, productString, Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(this, ScannedActivity.class);
                     intent.putExtra("JsonObjectId", productString);
-                    intent.putExtra("JsonObjectPrice", priceString);
+                    intent.putExtra("userId", getUserId());
                     startActivity(intent);
 
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    Toast.makeText(this, "Error scanning", Toast.LENGTH_SHORT).show();
                 }
             }
             else {
@@ -108,5 +100,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else {super.onActivityResult( requestCode, resultCode, data);}
     }
 
-
+    public String getUserId(){
+        String id = getIntent().getStringExtra("userId");
+        return id;
+    }
 }

@@ -13,6 +13,9 @@ import com.example.desarrollocometaapp.Views.MainActivity;
 import com.example.desarrollocometaapp.R;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class NewAccount extends AppCompatActivity implements View.OnClickListener {
 
     TextInputLayout email, password;
@@ -37,14 +40,15 @@ public class NewAccount extends AppCompatActivity implements View.OnClickListene
             String emailText = email.getEditText().getText().toString().trim();
             String passwordText = password.getEditText().getText().toString().trim();
 
-            if(!emailText.isEmpty() && !passwordText.isEmpty()){
-
-                requestClass.postStringLoginRequest(getApplicationContext(), url, emailText, passwordText);
-               /* Intent intent = new Intent(this, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            if(!emailText.isEmpty() && !passwordText.isEmpty()) {
+                String id = requestClass.postStringLoginRequest(getApplicationContext(), url, emailText, passwordText);
+                Intent intent = new Intent(this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);*/}
-            else{
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra("userId", id);
+                startActivity(intent);
+
+            }else{
                 Toast.makeText(this, "El campo de usuario o contraseña está vacío", Toast.LENGTH_SHORT).show();
                 }
         }

@@ -22,16 +22,19 @@ public class ScannedActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanned);
 
+        productText = (TextView) findViewById(R.id.productTextViewScanned);
         quantityText = (TextView) findViewById(R.id.quantityTextViewScanned);
         quantityText.setText("" + quantity);
         productText = (TextView) findViewById(R.id.productTextViewScanned);
         plusButton = (Button) findViewById(R.id.plusButtonScanned);
         plusButton.setOnClickListener(this);
         minusButton = (Button) findViewById(R.id.minusButtonScanned);
+
         minusButton.setOnClickListener(this);
         saveButton = (Button) findViewById(R.id.saveButtonScanned);
         saveButton.setOnClickListener(this);
         requester = new RequestClass();
+        requester.postScannedProductRequest(getApplicationContext(), "https://cometa.app/cafeteria/stock/getproduct",getProductId());
     }
 
     public void onClick(View view) {
@@ -48,12 +51,23 @@ public class ScannedActivity extends AppCompatActivity implements View.OnClickLi
                 }
                 break;
         case R.id.saveButtonScanned:
-            requester.postStringLoginRequest(getApplicationContext(), "https://cometa.app/cafeteria/home/pruebapost", "adrian10", "10" );
-        //JsonGetResponse();
-        break;
+            requester.postSaveProductRequest(getApplicationContext(), "https://cometa.app/cafeteria/stock/newsale", getUserId(), getProductId(), quantityText.getText().toString());
+            quantity = 0;
+            quantityText.setText("" + quantity);
+            break;
 
         default:
         break;
         }
     }
+
+    public String getProductId(){
+        String id = getIntent().getStringExtra("JsonObjectId");
+        return id;
+    }
+    public String getUserId(){
+        String id = getIntent().getStringExtra("userId");
+        return id;
+    }
+
 }
