@@ -19,19 +19,22 @@
         <activity android:name=".Views.ManualActivity">
 
         </activity>
-        <activity android:name=".Views.ScannedActivity" />
+        <activity android:name=".Views.ScannedActivity" >
+
+        </activity>
         <activity android:name=".Views.SplashScreen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".Auth.NewAccount" />
         <activity android:name=".Auth.Login" >
 
         </activity>
         <activity android:name=".Views.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <activity

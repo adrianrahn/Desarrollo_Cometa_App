@@ -23,35 +23,33 @@ public class ScannedActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_scanned);
 
         productText = (TextView) findViewById(R.id.productTextViewScanned);
+        productText.setText(getProductName());
         quantityText = (TextView) findViewById(R.id.quantityTextViewScanned);
         quantityText.setText("" + quantity);
-        productText = (TextView) findViewById(R.id.productTextViewScanned);
         plusButton = (Button) findViewById(R.id.plusButtonScanned);
         plusButton.setOnClickListener(this);
         minusButton = (Button) findViewById(R.id.minusButtonScanned);
-
         minusButton.setOnClickListener(this);
         saveButton = (Button) findViewById(R.id.saveButtonScanned);
         saveButton.setOnClickListener(this);
         requester = new RequestClass();
-        requester.postScannedProductRequest(getApplicationContext(), "https://cometa.app/cafeteria/stock/getproduct",getProductId());
     }
 
     public void onClick(View view) {
         switch (view.getId()){
 
-            case R.id.plusButtonManual:
+            case R.id.plusButtonScanned:
                 quantity += 1;
                 quantityText.setText("" + quantity);
                 break;
-            case R.id.minusButtonManual:
+            case R.id.minusButtonScanned:
                 if(quantity >= 1){
                     quantity -= 1;
                     quantityText.setText("" + quantity);
                 }
                 break;
         case R.id.saveButtonScanned:
-            requester.postSaveProductRequest(getApplicationContext(), "https://cometa.app/cafeteria/stock/newsale", getUserId(), getProductId(), quantityText.getText().toString());
+            requester.postSaveProductRequest(getApplicationContext(), "https://cometa.app/cafeteria/stock/newsale", "1", getProductId(), quantityText.getText().toString());
             quantity = 0;
             quantityText.setText("" + quantity);
             break;
@@ -70,4 +68,8 @@ public class ScannedActivity extends AppCompatActivity implements View.OnClickLi
         return id;
     }
 
+    public String getProductName(){
+        String id = getIntent().getStringExtra("productName");
+        return id;
+    }
 }

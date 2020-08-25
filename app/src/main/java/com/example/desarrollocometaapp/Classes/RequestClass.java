@@ -7,6 +7,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -36,9 +37,8 @@ public class RequestClass {
         myQueue.add(request);
     }
 
-
-
-    public void getArrayRequests(final Context context, final ArrayList<String> list, final ArrayList<Producto> arrayList){
+    //Todo: Products Array Request
+    public void getArrayRequest(final Context context, final ArrayList<String> nameList, final ArrayList<String> idList, final ArrayList<String> priceList){
         final RequestQueue myQueue = Volley.newRequestQueue(context);
         final JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, "https://cometa.app/cafeteria/stock/getproducts", null, new Response.Listener<JSONArray>() {
 
@@ -52,38 +52,9 @@ public class RequestClass {
                         String id = object.getString("id");
                         String name = object.getString("name");
                         String price = object.getString("price");
-                        list.add(name);
-
-                        Producto producto = new Producto(id, name, price);
-                        arrayList.add(producto);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context , error.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
-        myQueue.add(request);
-    }
-
-    //Todo: Products Array Request
-    public void getArrayRequest(final Context context, final ArrayList<String> list){
-        final RequestQueue myQueue = Volley.newRequestQueue(context);
-        final JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, "https://cometa.app/cafeteria/stock/getproducts", null, new Response.Listener<JSONArray>() {
-
-            @Override
-            public void onResponse(JSONArray response) {
-                try {
-                    JSONArray jsonArray = response;
-
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject object = jsonArray.getJSONObject(i);
-                        String name = object.getString("name");
-                        list.add(name);
+                        idList.add(id);
+                        nameList.add(name);
+                        priceList.add(price);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -104,7 +75,6 @@ public class RequestClass {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Toast.makeText(context, "respuesta post:"+ response, Toast.LENGTH_SHORT).show();
             }
         }, new Response.ErrorListener() {
             @Override
@@ -128,17 +98,12 @@ public class RequestClass {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-
-
-                if (response == "true"){
                     Toast.makeText(context, "Compra realizada correctamente: "+ response, Toast.LENGTH_SHORT).show();
-                }else{                    Toast.makeText(context, "compra:" + response, Toast.LENGTH_SHORT).show();
-                }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context , error.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(context , "Error al realizar la compra", Toast.LENGTH_LONG).show();
             }
         }){
             @Override
@@ -193,5 +158,4 @@ public class RequestClass {
         myQueue.add(stringRequest);
         return respuesta.get("response");
     }
-
 }

@@ -24,16 +24,12 @@ public class ManualActivity extends AppCompatActivity implements View.OnClickLis
     private Spinner productsSpinner;
     private int quantity = 0;
     RequestClass requester;
-    ArrayList<String> arrayList= new ArrayList<String>();
-    ArrayList<Producto> productoArrayList= new ArrayList<Producto>();
     String productId;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manual);
-
         quantityText = (TextView) findViewById(R.id.quantityTextViewManual);
         quantityText.setText("" + quantity);
         plusButton = (Button) findViewById(R.id.plusButtonManual);
@@ -44,8 +40,7 @@ public class ManualActivity extends AppCompatActivity implements View.OnClickLis
         saveButton.setOnClickListener(this);
         productsSpinner = (Spinner) findViewById(R.id.productsSpinnerManual);
         requester = new RequestClass();
-        arrayList = getIntentArray();
-        ArrayAdapter<CharSequence> adapter = new ArrayAdapter(this,android.R.layout.simple_spinner_item, arrayList);
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter(this,R.layout.custom_spinner, getNameArray());
         productsSpinner.setAdapter(adapter);
         productsSpinner.setOnItemSelectedListener(this);
 
@@ -67,7 +62,7 @@ public class ManualActivity extends AppCompatActivity implements View.OnClickLis
                 break;
 
             case R.id.saveButtonManual:
-                requester.postSaveProductRequest(getApplicationContext(), "https://cometa.app/cafeteria/stock/newsale", getUserId(), "1", quantityText.getText().toString());
+                requester.postSaveProductRequest(getApplicationContext(), "https://cometa.app/cafeteria/stock/newsale", "1", productId, quantityText.getText().toString());
                 break;
             default:
                 break;
@@ -77,9 +72,7 @@ public class ManualActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         try {
-            String text = productsSpinner.getSelectedItem().toString();
-            Toast.makeText(this, "id:" + text , Toast.LENGTH_SHORT).show();
-
+            productId = getIdArray().get(position);
         }catch (Error error){
             Toast.makeText(this, error.getMessage(), Toast.LENGTH_SHORT).show();
         }
@@ -90,13 +83,20 @@ public class ManualActivity extends AppCompatActivity implements View.OnClickLis
 
     }
 
-    public ArrayList<String> getIntentArray(){
-        ArrayList<String> list = getIntent().getStringArrayListExtra("array");
-        return list;
-    }
-
     public String getUserId(){
         String id = getIntent().getStringExtra("userId");
         return id;
+    }
+
+    public ArrayList<String> getNameArray(){
+        ArrayList<String> list = getIntent().getStringArrayListExtra("nameArray");
+        return list;
+    }
+    public ArrayList<String> getIdArray(){
+        ArrayList<String> list = getIntent().getStringArrayListExtra("idArray");
+        return list;
+    }public ArrayList<String> getPriceArray(){
+        ArrayList<String> list = getIntent().getStringArrayListExtra("priceArray");
+        return list;
     }
 }

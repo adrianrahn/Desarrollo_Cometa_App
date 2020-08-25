@@ -2,11 +2,15 @@ package com.example.desarrollocometaapp.Views;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import com.example.desarrollocometaapp.Auth.Login;
 import com.example.desarrollocometaapp.Classes.CaptureAct;
 import com.example.desarrollocometaapp.Classes.Producto;
 import com.example.desarrollocometaapp.Classes.RequestClass;
@@ -23,25 +27,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private Button scanButton, saveButton;
     RequestClass requestClass;
-    ArrayList<String> arrayList;
-    ArrayList<Producto> productoArrayList;
-
+    ArrayList<String> nameArrayList, idArrayList, priceArrayList;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         scanButton = (Button) findViewById(R.id.scanButton);
         scanButton.setOnClickListener(this);
         saveButton = (Button) findViewById(R.id.manualButton);
         saveButton.setOnClickListener(this);
         requestClass = new RequestClass();
-        arrayList = new ArrayList<String>();
-        productoArrayList = new ArrayList<Producto>();
-
-        requestClass.getArrayRequest(getApplicationContext(), arrayList);
+        nameArrayList = new ArrayList<String>();
+        priceArrayList = new ArrayList<String>();
+        idArrayList = new ArrayList<String>();
+        requestClass.getArrayRequest(getApplicationContext(), nameArrayList, idArrayList, priceArrayList);
     }
 
     public void onClick(View view) {
@@ -54,10 +55,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.manualButton:
                 Intent intent = new Intent(this, ManualActivity.class);
-                intent.putStringArrayListExtra("array", arrayList);
+                intent.putStringArrayListExtra("nameArray", nameArrayList);
+                intent.putStringArrayListExtra("idArray", idArrayList);
+                intent.putStringArrayListExtra("priceArray", priceArrayList);
                 startActivity(intent);
                 break;
-
             default:
                 break;
         }
@@ -83,11 +85,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 String resultado = result.getContents();
                 try {
                     JSONObject jsonjObject = new JSONObject(resultado);
-                    String productString = jsonjObject.getString("id");
-                    Toast.makeText(this, productString, Toast.LENGTH_SHORT).show();
+                    String idString = jsonjObject.getString("id");
+                    int position = Integer.parseInt(idString);
+                    String name = nameArrayList.get(position - 1);
                     Intent intent = new Intent(this, ScannedActivity.class);
-                    intent.putExtra("JsonObjectId", productString);
+                    intent.putExtra("JsonObjectId", idString);
                     intent.putExtra("userId", getUserId());
+                    intent.putExtra("productName", name);
                     startActivity(intent);
 
                 } catch (JSONException e) {
@@ -104,4 +108,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String id = getIntent().getStringExtra("userId");
         return id;
     }
+
+   /* public void userIdConfirmed(){
+        String id = getIntent().getStringExtra("userId");
+        if (id == null){
+            Intent intent = new Intent(this, Login.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        }else{
+            SharedPreferences.Editor myEditor = myPreferences.edit();
+            myEditor.putString("userId", id);
+
+        }
+
+    }*/
+
 }

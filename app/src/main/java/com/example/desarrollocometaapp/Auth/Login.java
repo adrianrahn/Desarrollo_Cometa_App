@@ -50,8 +50,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             if(!emailText.isEmpty() && !passwordText.isEmpty()){
                 String id = requestClass.postStringLoginRequest(getApplicationContext(), url, emailText, passwordText);
                 Intent intent = new Intent(this, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 intent.putExtra("userId", id);
                 startActivity(intent);
 
