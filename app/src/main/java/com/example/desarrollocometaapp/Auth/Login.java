@@ -7,9 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-
-
-import com.android.volley.RequestQueue;
+import com.example.desarrollocometaapp.Classes.SharedPreferenceConfig;
 import com.example.desarrollocometaapp.Views.MainActivity;
 import com.example.desarrollocometaapp.R;
 import com.example.desarrollocometaapp.Classes.RequestClass;
@@ -25,6 +23,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     TextInputLayout email, password;
     RequestClass requestClass;
     String url = "https://cometa.app/cafeteria/login/check";
+    SharedPreferenceConfig sharedPreferenceConfig;
 
 
     @Override
@@ -39,6 +38,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         noAccountButton = (Button) findViewById(R.id.noAccountBtn);
         noAccountButton.setOnClickListener(this);
         requestClass = new RequestClass();
+        sharedPreferenceConfig = new SharedPreferenceConfig(getApplicationContext());
     }
 
     public void onClick(View view) {
@@ -48,13 +48,13 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
 
             if(!emailText.isEmpty() && !passwordText.isEmpty()){
-                String id = requestClass.postStringLoginRequest(getApplicationContext(), url, emailText, passwordText);
-                Intent intent = new Intent(this, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                intent.putExtra("userId", id);
-                startActivity(intent);
 
+                requestClass.postStringLoginRequests(getApplicationContext(), url, emailText, passwordText);
+                sharedPreferenceConfig.loginStatus(true);
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
             } else{
                 Toast.makeText(this, "Correo y contraseña incorrecto", Toast.LENGTH_SHORT).show();
             }
@@ -62,4 +62,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
            startActivity(new Intent(this, NewAccount.class));
         }
     }
-}
+
+    }
+

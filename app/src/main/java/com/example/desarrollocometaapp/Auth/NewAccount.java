@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.desarrollocometaapp.Classes.RequestClass;
+import com.example.desarrollocometaapp.Classes.SharedPreferenceConfig;
 import com.example.desarrollocometaapp.Views.MainActivity;
 import com.example.desarrollocometaapp.R;
 import com.google.android.material.textfield.TextInputLayout;
@@ -22,6 +23,9 @@ public class NewAccount extends AppCompatActivity implements View.OnClickListene
     Button createAccountButton;
     RequestClass requestClass;
     String url = "https://cometa.app/cafeteria/login/check";
+    SharedPreferenceConfig sharedPreferenceConfig;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +37,8 @@ public class NewAccount extends AppCompatActivity implements View.OnClickListene
         createAccountButton = (Button) findViewById(R.id.createAccountBtn);
         createAccountButton.setOnClickListener(this);
         requestClass = new RequestClass();
+        sharedPreferenceConfig = new SharedPreferenceConfig(getApplicationContext());
+
     }
 
     public void onClick(View view) {
@@ -41,11 +47,11 @@ public class NewAccount extends AppCompatActivity implements View.OnClickListene
             String passwordText = password.getEditText().getText().toString().trim();
 
             if(!emailText.isEmpty() && !passwordText.isEmpty()) {
-                String id = requestClass.postStringLoginRequest(getApplicationContext(), url, emailText, passwordText);
+                requestClass.postStringLoginRequests(getApplicationContext(), url, emailText, passwordText);
+                sharedPreferenceConfig.loginStatus(true);
                 Intent intent = new Intent(this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.putExtra("userId", id);
                 startActivity(intent);
 
             }else{

@@ -2,38 +2,39 @@ package com.example.desarrollocometaapp.Views;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.desarrollocometaapp.Auth.Login;
 import com.example.desarrollocometaapp.Classes.CaptureAct;
-import com.example.desarrollocometaapp.Classes.Producto;
 import com.example.desarrollocometaapp.Classes.RequestClass;
+import com.example.desarrollocometaapp.Classes.SharedPreferenceConfig;
 import com.example.desarrollocometaapp.R;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private Button scanButton, saveButton;
+    private Button scanButton, saveButton, prueba;
     RequestClass requestClass;
     ArrayList<String> nameArrayList, idArrayList, priceArrayList;
+    SharedPreferenceConfig sharedPreferenceConfig;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        sharedPreferenceConfig = new SharedPreferenceConfig(getApplicationContext());
+        userStatusCheck();
+
         scanButton = (Button) findViewById(R.id.scanButton);
         scanButton.setOnClickListener(this);
         saveButton = (Button) findViewById(R.id.manualButton);
@@ -48,9 +49,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.scanButton:
-
                 ScanCode();
-
                 break;
 
             case R.id.manualButton:
@@ -90,7 +89,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     String name = nameArrayList.get(position - 1);
                     Intent intent = new Intent(this, ScannedActivity.class);
                     intent.putExtra("JsonObjectId", idString);
-                    intent.putExtra("userId", getUserId());
                     intent.putExtra("productName", name);
                     startActivity(intent);
 
@@ -104,24 +102,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else {super.onActivityResult( requestCode, resultCode, data);}
     }
 
-    public String getUserId(){
-        String id = getIntent().getStringExtra("userId");
-        return id;
-    }
-
-   /* public void userIdConfirmed(){
-        String id = getIntent().getStringExtra("userId");
-        if (id == null){
-            Intent intent = new Intent(this, Login.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-        }else{
-            SharedPreferences.Editor myEditor = myPreferences.edit();
-            myEditor.putString("userId", id);
-
+    public void userStatusCheck(){
+        if(sharedPreferenceConfig.readStatus() == false){
+            startActivity(new Intent(this, Login.class));
         }
-
-    }*/
-
+    }
 }

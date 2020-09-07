@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.desarrollocometaapp.R;
 import com.example.desarrollocometaapp.Classes.RequestClass;
@@ -52,6 +53,9 @@ public class ScannedActivity extends AppCompatActivity implements View.OnClickLi
             requester.postSaveProductRequest(getApplicationContext(), "https://cometa.app/cafeteria/stock/newsale", "1", getProductId(), quantityText.getText().toString());
             quantity = 0;
             quantityText.setText("" + quantity);
+
+            Toast.makeText(this, "compra realizada correctamente", Toast.LENGTH_SHORT).show();
+
             break;
 
         default:

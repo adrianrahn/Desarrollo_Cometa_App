@@ -16,12 +16,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Views.ManualActivity">
-
-        </activity>
-        <activity android:name=".Views.ScannedActivity" >
-
-        </activity>
+        <activity android:name=".Views.CompraRealizada"></activity>
+        <activity android:name=".Views.ManualActivity"></activity>
+        <activity android:name=".Views.ScannedActivity"></activity>
         <activity android:name=".Views.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,13 +27,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".Auth.NewAccount" />
-        <activity android:name=".Auth.Login" >
-
-        </activity>
-        <activity android:name=".Views.MainActivity">
-
-        </activity>
-
+        <activity android:name=".Auth.Login"></activity>
+        <activity android:name=".Views.MainActivity"></activity>
         <activity
             android:name=".Classes.CaptureAct"
             android:screenOrientation="fullSensor"

@@ -62,7 +62,8 @@ public class ManualActivity extends AppCompatActivity implements View.OnClickLis
                 break;
 
             case R.id.saveButtonManual:
-                requester.postSaveProductRequest(getApplicationContext(), "https://cometa.app/cafeteria/stock/newsale", "1", productId, quantityText.getText().toString());
+                String respuesta = requester.postSaveProductRequest(getApplicationContext(), "https://cometa.app/cafeteria/stock/newsale", "1", productId, quantityText.getText().toString());
+                Toast.makeText(this, respuesta, Toast.LENGTH_SHORT).show();
                 break;
             default:
                 break;
