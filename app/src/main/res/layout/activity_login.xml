@@ -12,8 +12,8 @@
         android:id="@+id/emailTextLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
         android:hint="Email"
         android:textColorHint="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -35,8 +35,8 @@
         android:id="@+id/passwordTextLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
         android:hint="Contraseña"
         android:textColorHint="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -59,8 +59,8 @@
         android:id="@+id/loginBtn"
         android:layout_width="match_parent"
         android:layout_height="52dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
         android:background="@drawable/white_rounded_button"
         android:onClick="onClick"
         android:text="Iniciar sesión"
@@ -97,10 +97,10 @@
         android:textSize="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.062"
+        app:layout_constraintHorizontal_bias="0.097"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.25" />
+        app:layout_constraintVertical_bias="0.247" />
 
     <TextView
         android:id="@+id/textView2"
@@ -111,10 +111,10 @@
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.175"
+        app:layout_constraintHorizontal_bias="0.265"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.30" />
+        app:layout_constraintVertical_bias="0.299" />
 
     <ImageView
         android:id="@+id/imageView"

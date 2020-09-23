@@ -20,22 +20,6 @@ import java.util.Map;
 public class RequestClass {
 
     SharedPreferenceConfig sharedPreferenceConfig;
-    //Todo: request simple string
-
-    public void getStringRequest(final Context context, String Url) {
-        RequestQueue myQueue = Volley.newRequestQueue(context);
-        StringRequest request = new StringRequest(Request.Method.GET, Url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Toast.makeText(context, response, Toast.LENGTH_SHORT).show();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-            }
-        });
-        myQueue.add(request);
-    }
 
     //Todo: Products Array Request
     public void getArrayRequest(final Context context, final ArrayList<String> nameList, final ArrayList<String> idList, final ArrayList<String> priceList) {
@@ -69,43 +53,21 @@ public class RequestClass {
         myQueue.add(request);
     }
 
-    //Todo: Scanned Product Request
-    public void postScannedProductRequest(final Context context, String Url, final String id) {
-        RequestQueue myQueue = Volley.newRequestQueue(context);
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, error.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("product_id", id);
-                return params;
-            }
-        };
-        myQueue.add(stringRequest);
-    }
-
     //Todo: Save Product Request
-    public String postSaveProductRequest(final Context context, String Url, final String userId, final String productId, final String quantity) {
-        final Map<String, String> respuesta = new HashMap<String, String>();
+    public void postSaveProductRequest(final Context context, final String userId, final String productId, final String quantity) {
 
+        sharedPreferenceConfig = new SharedPreferenceConfig(context);
+        String Url = "https://cometa.app/cafeteria/stock/newsale";
         RequestQueue myQueue = Volley.newRequestQueue(context);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                respuesta.put("respuesta", response);
+                sharedPreferenceConfig.compraStatus(true);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(context, "Error al realizar la compra", Toast.LENGTH_LONG).show();
+                sharedPreferenceConfig.compraStatus(false);
             }
         }) {
             @Override
@@ -114,15 +76,49 @@ public class RequestClass {
                 params.put("productid", productId);
                 params.put("userid", userId);
                 params.put("qty", quantity);
+                params.put("token", sharedPreferenceConfig.getToken());
                 return params;
             }
         };
         myQueue.add(stringRequest);
-        return respuesta.get("response");
     }
 
-
     //Todo: Login Request
+    public void postStringLoginRequests(final Context context,final String email, final String password) {
+        String url = "https://cometa.app/cafeteria/login/check";
+        RequestQueue myQueue = Volley.newRequestQueue(context);
+        sharedPreferenceConfig = new SharedPreferenceConfig(context);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    String id = response.getString("userId");
+                    String token = response.getString("token");
+                    sharedPreferenceConfig.saveIdAndToken(id, token);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+                public void onErrorResponse(VolleyError error) {
+            error.printStackTrace();
+            }
+        }){@Override
+        protected Map<String, String> getParams() {
+            Map<String, String> params = new HashMap<String, String>();
+            params.put("email", email);
+            params.put("password", password);
+            params.put("token", sharedPreferenceConfig.getToken());
+            return params;
+        }
+        };
+        myQueue.add(jsonObjectRequest);
+    }
+
+    /*
+
     public String postStringLoginRequest(final Context context, String Url, final String email, final String password) {
         final Map<String, String> respuesta = new HashMap<String, String>();
         RequestQueue myQueue = Volley.newRequestQueue(context);
@@ -163,36 +159,24 @@ public class RequestClass {
     }
 
 
-    public void postStringLoginRequests(final Context context, String Url, final String email, final String password) {
-        final Map<String, String> respuesta = new HashMap<String, String>();
-        RequestQueue myQueue = Volley.newRequestQueue(context);
-        sharedPreferenceConfig = new SharedPreferenceConfig(context);
+      //Todo: request simple string
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Url, null, new Response.Listener<JSONObject>() {
+    public void getStringRequest(final Context context, String Url) {
+        RequestQueue myQueue = Volley.newRequestQueue(context);
+        StringRequest request = new StringRequest(Request.Method.GET, Url, new Response.Listener<String>() {
             @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    String id = response.getString("userId");
-                    String token = response.getString("token");
-                    sharedPreferenceConfig.saveIdAndToken(id, token);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+            public void onResponse(String response) {
+                Toast.makeText(context, response, Toast.LENGTH_SHORT).show();
             }
         }, new Response.ErrorListener() {
             @Override
-                public void onErrorResponse(VolleyError error) {
-            error.printStackTrace();
+            public void onErrorResponse(VolleyError error) {
             }
-        }){@Override
-        protected Map<String, String> getParams() {
-            Map<String, String> params = new HashMap<String, String>();
-            params.put("email", email);
-            params.put("password", password);
-            return params;
-        }
-
-        };
-        myQueue.add(jsonObjectRequest);
+        });
+        myQueue.add(request);
     }
+
+
+
+*/
 }

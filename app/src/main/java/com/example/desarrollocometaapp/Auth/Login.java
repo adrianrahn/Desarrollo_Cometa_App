@@ -49,7 +49,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
             if(!emailText.isEmpty() && !passwordText.isEmpty()){
 
-                requestClass.postStringLoginRequests(getApplicationContext(), url, emailText, passwordText);
+                requestClass.postStringLoginRequests(getApplicationContext(), emailText, passwordText);
                 sharedPreferenceConfig.loginStatus(true);
                 Intent intent = new Intent(this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);

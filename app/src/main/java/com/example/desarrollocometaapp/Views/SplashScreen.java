@@ -9,8 +9,7 @@ import android.os.Handler;
 import com.example.desarrollocometaapp.Auth.Login;
 import com.example.desarrollocometaapp.R;
 
-public class
-SplashScreen extends AppCompatActivity {
+public class SplashScreen extends AppCompatActivity {
     /** Duration of wait **/
     private final int SPLASH_DISPLAY_LENGTH = 1000;
 

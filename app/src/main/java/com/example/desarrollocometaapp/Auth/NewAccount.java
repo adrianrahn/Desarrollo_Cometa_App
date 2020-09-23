@@ -13,13 +13,9 @@ import com.example.desarrollocometaapp.Classes.SharedPreferenceConfig;
 import com.example.desarrollocometaapp.Views.MainActivity;
 import com.example.desarrollocometaapp.R;
 import com.google.android.material.textfield.TextInputLayout;
-
-import java.util.HashMap;
-import java.util.Map;
-
 public class NewAccount extends AppCompatActivity implements View.OnClickListener {
 
-    TextInputLayout email, password;
+    TextInputLayout email, password, password2;
     Button createAccountButton;
     RequestClass requestClass;
     String url = "https://cometa.app/cafeteria/login/check";
@@ -34,6 +30,7 @@ public class NewAccount extends AppCompatActivity implements View.OnClickListene
 
         email = (TextInputLayout) findViewById(R.id.emailTextNewAccount);
         password = (TextInputLayout) findViewById(R.id.passwordTextNewAccount);
+        password2 = (TextInputLayout) findViewById(R.id.passwordTextNewAccount2);
         createAccountButton = (Button) findViewById(R.id.createAccountBtn);
         createAccountButton.setOnClickListener(this);
         requestClass = new RequestClass();
@@ -45,15 +42,18 @@ public class NewAccount extends AppCompatActivity implements View.OnClickListene
         if (view.getId() == R.id.createAccountBtn){
             String emailText = email.getEditText().getText().toString().trim();
             String passwordText = password.getEditText().getText().toString().trim();
+            String passwordText2 = password2.getEditText().getText().toString().trim();
 
             if(!emailText.isEmpty() && !passwordText.isEmpty()) {
-                requestClass.postStringLoginRequests(getApplicationContext(), url, emailText, passwordText);
-                sharedPreferenceConfig.loginStatus(true);
-                Intent intent = new Intent(this, MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
 
+                if(passwordText == passwordText2){requestClass.postStringLoginRequests(getApplicationContext(), emailText, passwordText);
+                    sharedPreferenceConfig.loginStatus(true);
+                    Intent intent = new Intent(this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);}else{
+                    Toast.makeText(this, "Contraseñas no coinciden", Toast.LENGTH_SHORT).show();
+                }
             }else{
                 Toast.makeText(this, "El campo de usuario o contraseña está vacío", Toast.LENGTH_SHORT).show();
                 }

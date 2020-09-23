@@ -8,7 +8,8 @@ import android.os.Handler;
 
 import com.example.desarrollocometaapp.R;
 
-public class CompraRealizada extends AppCompatActivity {
+public class ErrorEnCompra extends AppCompatActivity {
+
     /** Duration of wait **/
     private final int SPLASH_DISPLAY_LENGTH = 4500;
 
@@ -16,16 +17,15 @@ public class CompraRealizada extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_compra_realizada);
-
+        setContentView(R.layout.activity_error_en_compra);
 
         new Handler().postDelayed(new Runnable(){
             @Override
             public void run() {
 
-                Intent mainIntent = new Intent(CompraRealizada.this, MainActivity.class);
-                CompraRealizada.this.startActivity(mainIntent);
-                CompraRealizada.this.finish();
+                Intent mainIntent = new Intent(ErrorEnCompra.this, MainActivity.class);
+                ErrorEnCompra.this.startActivity(mainIntent);
+                ErrorEnCompra.this.finish();
             }
         }, SPLASH_DISPLAY_LENGTH);
     }

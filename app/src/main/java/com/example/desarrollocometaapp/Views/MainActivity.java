@@ -3,6 +3,8 @@ package com.example.desarrollocometaapp.Views;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -22,7 +24,7 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private Button scanButton, saveButton, prueba;
+    private Button scanButton, saveButton;
     RequestClass requestClass;
     ArrayList<String> nameArrayList, idArrayList, priceArrayList;
     SharedPreferenceConfig sharedPreferenceConfig;
@@ -85,11 +87,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 try {
                     JSONObject jsonjObject = new JSONObject(resultado);
                     String idString = jsonjObject.getString("id");
-                    int position = Integer.parseInt(idString);
-                    String name = nameArrayList.get(position - 1);
+                    int position = Integer.parseInt(idString) -1;
+                    String name = nameArrayList.get(position);
+                    String price = priceArrayList.get(position);
                     Intent intent = new Intent(this, ScannedActivity.class);
                     intent.putExtra("JsonObjectId", idString);
                     intent.putExtra("productName", name);
+                    intent.putExtra("productPrice", price);
                     startActivity(intent);
 
                 } catch (JSONException e) {
@@ -106,5 +110,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(sharedPreferenceConfig.readStatus() == false){
             startActivity(new Intent(this, Login.class));
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.signOutButton) {
+            sharedPreferenceConfig.loginStatus(false);
+            Intent intent = new Intent(MainActivity.this, Login.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

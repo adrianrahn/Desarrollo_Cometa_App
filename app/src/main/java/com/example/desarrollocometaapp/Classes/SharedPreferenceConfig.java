@@ -41,4 +41,16 @@ public class SharedPreferenceConfig {private SharedPreferences sharedPreferences
         return sharedPreferences.getString("TOKEN", "");
     }
 
+    public void compraStatus(boolean status){
+        SharedPreferences.Editor editor =  sharedPreferences.edit();
+        editor.putBoolean("COMPRA", status);
+        editor.commit();
+    }
+
+    public boolean compraReadStatus(){
+        boolean status = false;
+        status = sharedPreferences.getBoolean("COMPRA", false);
+        return status;
+    }
+
 }
